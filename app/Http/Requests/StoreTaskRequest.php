@@ -22,7 +22,15 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|max:100'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'タイトルは必ず入力してください',
+            'title.max' => 'タイトルは100文字以内で入力してください'
         ];
     }
 }

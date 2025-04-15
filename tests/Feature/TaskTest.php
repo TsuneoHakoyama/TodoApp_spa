@@ -36,6 +36,34 @@ class TaskTest extends TestCase
     }
 
     #[Test]
+    public function storeTasks_WithNoTitle(): void
+    {
+        $data = ['title' => ''];
+
+        $response = $this->postJson('api/tasks', $data);
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => 'タイトルは必ず入力してください'
+            ]);
+    }
+
+    #[Test]
+    public function storeTasks_TooManyLetters(): void
+    {
+        $data = ['title' => str_repeat('あ', 101)];
+
+        $response = $this->postJson('api/tasks', $data);
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => 'タイトルは100文字以内で入力してください'
+            ]);
+    }
+
+    #[Test]
     public function updateTasks(): void
     {
         $task = Task::factory()->create();
@@ -45,6 +73,36 @@ class TaskTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonFragment($task->toArray());
+    }
+
+    #[Test]
+    public function updateTasks_WithNoTitle(): void
+    {
+        $task = Task::factory()->create();
+        $task->title = '';
+
+        $response = $this->patchJson("api/tasks/{$task->id}", $task->toArray());
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => 'タイトルは必ず入力してください'
+            ]);
+    }
+
+    #[Test]
+    public function updateTasks_TooManyLetters(): void
+    {
+        $task = Task::factory()->create();
+        $task->title = str_repeat('あ', 101);
+
+        $response = $this->patchJson("api/tasks/{$task->id}", $task->toArray());
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => 'タイトルは100文字以内で入力してください'
+            ]);
     }
 
     #[Test]
