@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 type Task = {
     id: number
@@ -8,17 +9,24 @@ type Task = {
     created_at: Date
     updated_at: Date
 }
+
 export const Index: React.FC = () => {
 
-    const [tasks, setTasks] = useState<Task[]>([])
-    const getTasks = async () => {
-        const { data } = await axios.get<Task[]>('api/tasks');
-        setTasks(data);
-    }
+    const { data: tasks, status } = useQuery({
+        queryKey: ['tasks'],
+        queryFn: async () => {
+            const { data } = await axios.get<Task[]>('api/tasks');
+            return data
+        }
+    })
 
-    useEffect(() => {
-        getTasks()
-    }, [])
+    if (status === 'pending') {
+        return <div className="loading" />
+    } else if (status === 'error') {
+        return <div className="align-center">データの読み込みに失敗しました</div>
+    } else if (!tasks || tasks.length <= 0) {
+        return <div className="align-center">登録されたTODOはありません</div>
+    }
 
     return (
         <>
