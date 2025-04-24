@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav } from './components/routes';
+import { Nav } from './routes';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 export const App: React.FC = () => {

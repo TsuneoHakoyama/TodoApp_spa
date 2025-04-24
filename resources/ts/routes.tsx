@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Index } from './tasks/index';
-import { Login } from "./login/login";
-import { Help } from "./help/help";
+import { Index } from './pages/tasks/index';
+import { Login } from "./pages/login/login";
+import { Help } from "./pages/help/help";
 
 export const Nav: React.FC = () => {
     return (
@@ -25,4 +25,4 @@ export const Nav: React.FC = () => {
             </Routes>
         </BrowserRouter>
     );
-};
+}

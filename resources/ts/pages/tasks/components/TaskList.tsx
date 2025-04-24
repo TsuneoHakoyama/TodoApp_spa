@@ -1,24 +1,9 @@
 import React from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useTasks } from "../../../queries/TaskQuery";
+import { TaskItem } from "./TaskItem";
 
-type Task = {
-    id: number
-    title: string
-    is_done: boolean
-    created_at: Date
-    updated_at: Date
-}
-
-export const Index: React.FC = () => {
-
-    const { data: tasks, status } = useQuery({
-        queryKey: ['tasks'],
-        queryFn: async () => {
-            const { data } = await axios.get<Task[]>('api/tasks');
-            return data
-        }
-    })
+export const TaskList: React.FC = () => {
+    const { data: tasks, status } = useTasks()
 
     if (status === 'pending') {
         return <div className="loading" />
@@ -30,29 +15,16 @@ export const Index: React.FC = () => {
 
     return (
         <>
-            <form className="input-form">
-                <div className="inner">
-                    <input type="text" className="input" placeholder="TODOを入力してください。" defaultValue="" />
-                    <button className="btn is-primary">追加</button>
-                </div>
-            </form>
             <div className="inner">
                 <ul className="task-list">
                     {tasks.map(task => (
-                        <li key={task.id}>
-                            <label className="checkbox-label">
-                                <input type="checkbox" className="checkbox-input" />
-                            </label>
-                            <div><span>{task.title}</span></div>
-                            <button className="btn is-delete">削除</button>
-                        </li>
+                        <TaskItem key={task.id} task={ task } />
                     ))}
-
                     <li>
                         <label className="checkbox-label">
                             <input type="checkbox" className="checkbox-input" />
                         </label>
-                        <form><input type="text" className="input" defaultValue="編集中のTODO"/></form>
+                        <form><input type="text" className="input" defaultValue="編集中のTODO" /></form>
                         <button className="btn">更新</button>
                     </li>
                     <li className="done">
@@ -80,4 +52,4 @@ export const Index: React.FC = () => {
             </div>
         </>
     );
-};
+}
