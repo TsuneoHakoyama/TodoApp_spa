@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Illuminate\Http\Request;
+
 class TaskController extends Controller
 {
     /**
@@ -63,5 +65,20 @@ class TaskController extends Controller
         return $task->delete()
             ? response()->json($task, 200)
             : response()->json([], 500);
+    }
+
+    /**
+     * Update is_done state for the specified resource in storage.
+     * @param \App\Models\Task $task
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateDone(Task $task, Request $request)
+    {
+        $task->is_done = $request->is_done;
+
+        return $task->update()
+            ? response()->json($task)
+            : response([], 500);
     }
 }

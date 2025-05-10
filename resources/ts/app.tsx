@@ -1,6 +1,8 @@
 import React from "react";
-import { Nav } from './routes';
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+
+import { Router } from './routes';
 
 export const App: React.FC = () => {
     
@@ -8,7 +10,8 @@ export const App: React.FC = () => {
     
     return (
         <QueryClientProvider client={queryClient}>
-            <Nav />
+            <Router />
+            <ToastContainer hideProgressBar={true} />
         </QueryClientProvider>
     );
 }

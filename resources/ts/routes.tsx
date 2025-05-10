@@ -1,11 +1,12 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
+
 import { Index } from './pages/tasks/index';
 import { Login } from "./pages/login/login";
 import { Help } from "./pages/help/help";
 
-export const Nav: React.FC = () => {
+export const Router: React.FC = () => {
     return (
         <BrowserRouter>
             <header className="global-head">
