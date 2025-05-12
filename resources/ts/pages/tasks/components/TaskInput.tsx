@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
+
+import { useCreateTask } from "../../../queries/TaskQuery"
 
 export const TaskInput: React.FC = () => {
+    const [title, setTitle] = useState("");
+    const createTask = useCreateTask();
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        createTask.mutate(title);
+        setTitle("");
+    
+}
+
     return (
-        <form className="input-form">
+        <form className="input-form" onSubmit={handleSubmit}>
             <div className="inner">
                 <input type="text"
                     className="input"
                     placeholder="TODOを入力してください。"
-                    value=""
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
                 <button className="btn is-primary">追加</button>
             </div>
