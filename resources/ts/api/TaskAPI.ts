@@ -1,10 +1,25 @@
 import axios from "axios";
 
 import { Task } from "../types/Task";
-
 export const getTasks = async () => {
-    const { data } = await axios.get<Task>(
+    const { data } = await axios.get<Task[]>(
         'api/tasks'
+    );
+    return data;
+}
+
+export const createTask = async (title: string) => {
+    const { data } = await axios.post<Task>(
+        'api/tasks',
+        { title: title }
+    );
+    return data;
+}
+
+export const updateTask = async ({ id, task }:{id: number, task: Task}) => {
+    const { data } = await axios.patch<Task>(
+        `api/tasks/${id}`,
+        task
     );
     return data;
 }
@@ -17,10 +32,9 @@ export const updateDoneTask = async ({ id, is_done }: Task) => {
     return data;
 }
 
-export const createTask = async (title: string) => {
-    const { data } = await axios.post<Task>(
-        'api/tasks',
-        { title: title }
+export const deleteTask = async (id: number) => {
+    const { data } = await axios.delete<Task>(
+        `api/tasks/${id}`
     );
     return data;
 }
