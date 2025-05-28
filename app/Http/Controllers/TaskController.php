@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
 {
@@ -15,7 +17,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::orderBy('created_at', 'desc')->get();
+        return Task::where('user_id', Auth::id())->orderByDesc('id')->get();
     }
 
     /**
@@ -25,6 +27,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $request->merge(['user_id' => Auth::id()]);
         $task = Task::create($request->all());
 
         return $task
@@ -48,6 +51,7 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        Gate::authorize('update', $task);
         $task->title = $request->title;
 
         return $task->update()
@@ -62,6 +66,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        Gate::authorize('delete', $task);
         return $task->delete()
             ? response()->json($task, 200)
             : response()->json([], 500);
@@ -75,6 +80,7 @@ class TaskController extends Controller
      */
     public function updateDone(Task $task, Request $request)
     {
+        Gate::authorize('update', $task);
         $task->is_done = $request->is_done;
 
         return $task->update()

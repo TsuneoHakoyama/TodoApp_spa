@@ -4,8 +4,6 @@ namespace App\Policies;
 
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
-
 class TaskPolicy
 {
     /**
@@ -37,7 +35,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): bool
     {
-        return false;
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -45,7 +43,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task): bool
     {
-        return false;
+        return $user->id === $task->user_id;
     }
 
     /**
